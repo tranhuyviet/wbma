@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 export class HomePage implements OnInit {
 
   picArray: Pic[] = [];
+  url = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
   constructor(
     public navCtrl: NavController,
@@ -25,8 +26,16 @@ export class HomePage implements OnInit {
   }
 
   getPic() {
-    this.http.get<Pic[]>('../../assets/test.json').subscribe((result: Pic[]) => {
-      this.picArray = result;
+    this.http.get<Pic[]>('http://media.mw.metropolia.fi/wbma/media').subscribe((result: Pic[]) => {
+      this.picArray = result.map(dt => {
+        // console.log(dt);
+        return{
+          title: dt.title,
+          description: dt.description,
+          filename: this.url + dt.filename,
+          thumbnails: this.url + dt.filename.substring(0, dt.filename.lastIndexOf('.')) + '-tn160.png'
+        };
+      });
       console.log(this.picArray);
     });
   }
