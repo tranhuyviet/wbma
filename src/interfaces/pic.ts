@@ -8,7 +8,7 @@ export interface Pic {
     mime_type: string;
     time_added: string;
     screenshot?: string;
-    thumbnails?: string;
+    thumbnails?: object;
 }
 
 export interface Thumbnail {
