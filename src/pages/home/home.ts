@@ -5,6 +5,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 import { Pic } from '../../interfaces/pic';
 import { HttpClient } from '@angular/common/http';
+import { MediaProvider } from '../../providers/media/media';
 
 @Component({
   selector: 'page-home',
@@ -18,7 +19,8 @@ export class HomePage implements OnInit {
   constructor(
     public navCtrl: NavController,
     private photoViewer: PhotoViewer,
-    public http: HttpClient
+    public http: HttpClient,
+    public mediaProvider: MediaProvider
   ) {}
 
   ngOnInit() {
@@ -26,17 +28,13 @@ export class HomePage implements OnInit {
   }
 
   getPic() {
-    this.http.get<Pic[]>('http://media.mw.metropolia.fi/wbma/media').subscribe((result: Pic[]) => {
-      this.picArray = result.map(dt => {
-        // console.log(dt);
-        return{
-          title: dt.title,
-          description: dt.description,
-          filename: this.url + dt.filename,
-          thumbnails: this.url + dt.filename.substring(0, dt.filename.lastIndexOf('.')) + '-tn160.png'
-        };
+    this.mediaProvider.getAllMedia().subscribe((data: Pic[]) => {
+      console.log('data', data);
+      this.picArray = data.map((pic: Pic) => {
+        pic.thumbnails = this.url + pic.filename.substring(0, pic.filename.lastIndexOf('.')) + '-tn160.png';
+        console.log('pic after', pic);
+        return pic;
       });
-      console.log(this.picArray);
     });
   }
 
