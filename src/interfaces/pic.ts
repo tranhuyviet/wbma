@@ -11,8 +11,17 @@ export interface Pic {
     thumbnails?: object;
 }
 
-export interface Thumbnail {
-    160: string;
-    320: string;
-    640: string;
+export interface User {
+    user_id?: number;
+    username: string;
+    password?: string;
+    email?: string;
+    full_name?: string;
+    time_create?: Date;
+}
+
+export interface LoginResponse {
+    message: string;
+    token: string;
+    user: User;
 }
