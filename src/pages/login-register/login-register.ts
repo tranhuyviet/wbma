@@ -10,23 +10,10 @@ import { User } from '../../interfaces/pic';
 })
 export class LoginRegisterPage {
 
-  // username: string;
-  // password: string;
   user: User = { username: null };
   constructor(public navCtrl: NavController, public navParams: NavParams, private mediaProvider: MediaProvider, public alertCtrl: AlertController) {
   }
 
-  /*
-  login() {
-    // console.log(this.username, this.password);
-    this.mediaProvider.login(this.username, this.password).subscribe((result: any) => {
-      console.log('result:', result);
-      if (result.message === 'Logged in successfully') {
-        this.navCtrl.push(HomePage);
-      }
-    });
-  }
-  */
 
   login() {
     this.mediaProvider.login(this.user).subscribe(
