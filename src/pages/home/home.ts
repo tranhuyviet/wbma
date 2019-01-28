@@ -6,6 +6,8 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { Pic } from '../../interfaces/pic';
 import { HttpClient } from '@angular/common/http';
 import { MediaProvider } from '../../providers/media/media';
+import { Observable } from 'rxjs/Observable';
+import { Media } from '../../interfaces/media';
 
 @Component({
   selector: 'page-home',
@@ -13,7 +15,8 @@ import { MediaProvider } from '../../providers/media/media';
 })
 export class HomePage implements OnInit {
 
-  picArray: Pic[] = [];
+  picArray: Observable<Pic[]>;
+  // media: Observable<Media>;
   url = 'http://media.mw.metropolia.fi/wbma/uploads/';
 
   constructor(
@@ -28,7 +31,8 @@ export class HomePage implements OnInit {
   }
 
   getPic() {
-    this.mediaProvider.getAllMedia().subscribe((data: Pic[]) => {
+    this.picArray = this.mediaProvider.getAllMedia();
+    /* this.mediaProvider.getAllMedia().subscribe((data: Pic[]) => {
 
       data.forEach((pic: Pic) => {
         // add files to picArray
@@ -37,7 +41,8 @@ export class HomePage implements OnInit {
           this.picArray.push(file);
         });
       });
-    });
+      console.log(this.picArray);
+    }); */
   }
 
   viewOriginalImage(linkImage: string) {

@@ -13,6 +13,7 @@ import { MediaProvider } from '../providers/media/media';
 import { MenuPage } from '../pages/menu/menu';
 import { LoginRegisterPage } from '../pages/login-register/login-register';
 import { LogoutPage } from '../pages/logout/logout';
+import { PipesModule } from '../pipes/pipes.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { LogoutPage } from '../pages/logout/logout';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    HttpClientModule
+    HttpClientModule,
+    PipesModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -40,7 +42,8 @@ import { LogoutPage } from '../pages/logout/logout';
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     PhotoViewer,
-    MediaProvider
+    MediaProvider,
+    
   ],
 })
 export class AppModule {
