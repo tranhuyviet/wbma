@@ -7,7 +7,6 @@ import { Pic } from '../../interfaces/pic';
 import { HttpClient } from '@angular/common/http';
 import { MediaProvider } from '../../providers/media/media';
 import { Observable } from 'rxjs/Observable';
-import { Media } from '../../interfaces/media';
 
 @Component({
   selector: 'page-home',

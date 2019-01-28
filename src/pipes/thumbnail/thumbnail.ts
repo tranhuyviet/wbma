@@ -2,11 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { MediaProvider } from '../../providers/media/media';
 import { Media } from '../../interfaces/media';
 
-/**
- * Generated class for the ThumbnailPipe pipe.
- *
- * See https://angular.io/api/core/Pipe for more info on Angular Pipes.
- */
 @Pipe({
   name: 'thumbnail',
   // pure: false,
@@ -20,7 +15,7 @@ export class ThumbnailPipe implements PipeTransform {
 
   }
 
-  transform(id: number, ...args) {
+  async transform(id: number, ...args) {
     console.log(args);
     /* if (this.catchId !== id) {
       this.catchId = id;

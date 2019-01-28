@@ -22,8 +22,11 @@ export class LoginRegisterPage {
         this.mediaProvider.loggedIn = true;
         // save token to localstorage
         localStorage.setItem('token', response.token);
+        localStorage.setItem('user_id', response.user.user_id.toString());
+        localStorage.setItem('username', response.user.username);
+        localStorage.setItem('email', response.user.email);
         // move to home page (navCtrl)
-        this.navCtrl.setRoot(HomePage);
+        this.navCtrl.setRoot(HomePage).catch(err => { console.log(err); });
         console.log('token:', localStorage.getItem('token'));
       },
       error => {
@@ -55,7 +58,9 @@ export class LoginRegisterPage {
           subTitle: 'Please enter another user name!',
           buttons: ['OK']
         });
-        alert.present();
+        alert.present().catch(err => {
+          console.log(err);
+        });
       }
     });
   }

@@ -1,0 +1,16 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Profile</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <h3>Avatar:</h3>
+  <img [src]="url + (user.file_id | thumbnail : 'small' | async)" [alt]="user.title">
+  <h3>Name: {{username}}</h3>
+  <h3>Email: {{email}}</h3>
+</ion-content>
