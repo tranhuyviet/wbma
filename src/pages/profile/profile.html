@@ -13,4 +13,7 @@
   <img [src]="url + (user.file_id | thumbnail : 'small' | async)" [alt]="user.title">
   <h3>Name: {{username}}</h3>
   <h3>Email: {{email}}</h3>
+  <div>
+    <button ion-button (click)="onLogout()">Logout</button>
+  </div>
 </ion-content>

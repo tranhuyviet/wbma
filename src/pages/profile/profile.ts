@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
 import { Pic } from '../../interfaces/pic';
+import { LoginRegisterPage } from '../login-register/login-register';
 // import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -42,6 +43,14 @@ export class ProfilePage implements OnInit {
       });
       this.user = findResult[0];
       console.log(this.user);
+    });
+  }
+
+  onLogout() {
+    this.mediaProvider.loggedIn = false;
+    localStorage.clear();
+    this.navCtrl.setRoot(LoginRegisterPage).catch(err => {
+      console.log(err);
     });
   }
 
