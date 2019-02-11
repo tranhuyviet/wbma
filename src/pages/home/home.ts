@@ -2,16 +2,19 @@ import { Component, OnInit } from "@angular/core";
 import { NavController, Thumbnail } from "ionic-angular";
 import { PhotoViewer } from "@ionic-native/photo-viewer";
 import { IPicture } from "../../interfaces/pic";
+import { IPicture2 } from "../../interfaces/pic";
 import { MediaProvider } from "../../providers/media/media";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { ThumbnailPipe } from "../../pipes/thumbnail/thumbnail";
+import { UploadPage } from "../upload/upload";
 
 @Component({
   selector: "page-home",
   templateUrl: "home.html"
 })
 export class HomePage implements OnInit {
+  ngOnInit() {}
   picArray: IPicture[];
   picArray2: IPicture2[];
   picArray3: Observable<IPicture2[]>;
@@ -24,12 +27,13 @@ export class HomePage implements OnInit {
     private mediaProvider: MediaProvider
   ) {}
 
-  ngOnInit() {
+  ionViewDidEnter() {
     // this.loadItemsFromServer();
     //this.getAllFile();
     this.mediaProvider.getUsersInfo();
     this.getAllFiles3();
     //console.log(this.mediaProvider.user_id);
+    this;
   }
 
   loadItems() {
@@ -65,15 +69,15 @@ export class HomePage implements OnInit {
 
   getAllFiles() {
     this.mediaProvider.getAllMedia().subscribe((data: IPicture2[]) => {
-      console.log("data::", data);
+      //console.log("data::", data);
       // A
       this.picArray2 = data.map((pic: IPicture2) => {
         const nameArray = pic.filename.split(".");
-        console.log("nameArray", nameArray);
+        //console.log("nameArray", nameArray);
         pic.thumbnails = {
           w160: nameArray[0] + "-tn160.png"
         };
-        console.log("pic after ", pic);
+        //console.log("pic after ", pic);
         return pic;
       });
 
@@ -91,5 +95,8 @@ export class HomePage implements OnInit {
   getAllFiles3() {
     this.picArray3 = this.mediaProvider.getAllMedia();
     //console.log(this.picArray3);
+  }
+  goToUpload() {
+    this.navCtrl.push(UploadPage);
   }
 }

@@ -58,7 +58,7 @@ export interface UsernameResponse {
     available: string;
   }
   
-  export interface TagsResponse {
+export interface TagsResponse {
     file_id: number;
     tag: string;
     filename: string;
@@ -69,4 +69,10 @@ export interface UsernameResponse {
     tag_id: number;
     time_added: string;
     title: string;
+  }
+
+export interface UploadForm {
+    file?: File;
+    description?: string;
+    title?: string;
   }
