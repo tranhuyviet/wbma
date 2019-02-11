@@ -11,6 +11,12 @@ export interface Pic {
     thumbnails?: object;
 }
 
+export interface IPicture {
+    title: string;
+    details: string;
+    thumbnail: string;
+    original: string;
+  }
 export interface IPicture2 {
     file_id: number;
     user_id: number;
