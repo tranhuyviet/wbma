@@ -1,67 +1,135 @@
-import { Component } from '@angular/core';
-import { AlertController, NavController, NavParams } from 'ionic-angular';
-import { MediaProvider } from '../../providers/media/media';
-import { HomePage } from '../home/home';
-import { User } from '../../interfaces/pic';
+import { Component, OnInit } from "@angular/core";
+import { IonicPage, NavController, NavParams } from "ionic-angular";
+import { NgModule } from "@angular/core";
+import { HomePage } from "../home/home";
+import { Http, Headers } from "@angular/http";
+import { HttpClient } from "@angular/common/http";
+import { User, LoginResponse, UsernameResponse } from "../../interfaces/pic";
+import { MediaProvider } from "../../providers/media/media";
+import { NgForm } from "@angular/forms";
 
+@IonicPage()
 @Component({
-  selector: 'page-login-register',
-  templateUrl: 'login-register.html',
+  selector: "page-login-register",
+  templateUrl: "login-register.html"
 })
 export class LoginRegisterPage {
-
   user: User = { username: null };
-  constructor(public navCtrl: NavController, public navParams: NavParams, private mediaProvider: MediaProvider, public alertCtrl: AlertController) {
+  onRegister = false;
+  usernameError = "";
+  passwordError = "";
+  emailError = "";
+
+  constructor(
+    public mediaprovider: MediaProvider,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public http: HttpClient
+  ) {}
+  ngOnInit() {
+    this.checkLogin();
   }
-
-
-  login() {
-    this.mediaProvider.login(this.user).subscribe(
-      response => {
-        // console.log(response);
-        this.mediaProvider.loggedIn = true;
-        // save token to localstorage
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user_id', response.user.user_id.toString());
-        localStorage.setItem('username', response.user.username);
-        localStorage.setItem('email', response.user.email);
-        // move to home page (navCtrl)
-        this.navCtrl.setRoot(HomePage).catch(err => { console.log(err); });
-        console.log('token:', localStorage.getItem('token'));
+  checkLogin() {
+    if (localStorage.getItem("token")) {
+      this.navCtrl.push(HomePage);
+    }
+  }
+  loginClicked(formSignIn) {
+    console.log(formSignIn);
+    this.mediaprovider.login(this.user).subscribe(
+      (response: LoginResponse) => {
+        console.log("response");
+        console.log(response);
+        localStorage.setItem("token", response.token);
+        this.navCtrl.push(HomePage);
+        this.mediaprovider.token = response.token;
+        this.mediaprovider.loggedIn = true;
+        this.mediaprovider.user_id = response.user.user_id;
+        console.log("user.id: " + this.mediaprovider.user_id);
       },
       error => {
         console.log(error);
       }
     );
   }
+  //thanhvl@metropolia.fi
 
-  // TODO: register method
-  register() {
-    let userAvailable: boolean;
-    this.mediaProvider.checkUserExist(this.user.username).subscribe((result: any) => {
-      // console.log(result.available);
-      userAvailable = result.available;
-      if (userAvailable) { // user is not exist, can create new user
-        // console.log('create user');
-        this.mediaProvider.register(this.user).subscribe((res: any) => {
-          console.log(res);
-          if (res.message === 'User created successfully') {
-             console.log('go to home');
-             // this.navCtrl.push(HomePage);
-             this.login();
+  registerClicked(formSignUp) {
+    console.log(formSignUp);
+
+    if (formSignUp.valid) {
+      this.mediaprovider.checkIfUserExists(this.user).subscribe(
+        (response: UsernameResponse) => {
+          console.log("res :", response);
+          console.log("user :", this.user);
+
+          if (response.available) {
+            this.mediaprovider.register(this.user).subscribe(
+              (response: LoginResponse) => {
+                localStorage.setItem("token", response.token);
+                this.navCtrl.push(HomePage);
+                console.log(response);
+              },
+              error => {
+                console.log(error);
+              }
+            );
           }
-        });
-      } else { // user is exist, cannot create
-        console.log('user exist');
-        const alert = this.alertCtrl.create({
-          title: 'User exist!',
-          subTitle: 'Please enter another user name!',
-          buttons: ['OK']
-        });
-        alert.present().catch(err => {
-          console.log(err);
-        });
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
+  }
+
+  openRegisterForm() {
+    this.onRegister = true;
+  }
+
+  checkUsername() {
+    this.usernameError = "";
+    if (this.user.username != null) {
+      if (this.user.username.length < 3) {
+        this.usernameError = "The username should be more than 3 characters.";
+      } else {
+        this.mediaprovider.checkIfUserExists(this.user).subscribe(
+          (response: UsernameResponse) => {
+            console.log(response);
+            if (!response.available) {
+              this.usernameError = "this username is not available!";
+            }
+          },
+          error => {
+            console.log(error);
+          }
+        );
       }
-    });
+    } else {
+      this.usernameError = "please, enter the usernam";
+    }
+  }
+
+  checkPassword() {
+    this.passwordError = "";
+
+    if (this.user.password == null) {
+      this.passwordError = "Please, enter your password";
+    } else if (this.user.password.length < 5) {
+      this.passwordError = "The username should be more than 5 characters.";
+    }
+    if (this.user.password !== this.user.password2) {
+      this.passwordError += "These passwords do not match..";
+    }
+  }
+
+  checkEmail(formSignUp) {
+    this.emailError = "";
+    console.log(formSignUp.controls.email.valid);
+    if (this.user.email == null) {
+      this.emailError = "Please, enter your Email";
+    } else if (!formSignUp.controls.email.valid) {
+      this.emailError = "Email error";
+    } else this.emailError = "";
   }
 }

@@ -32,3 +32,21 @@ export interface LoginResponse {
     token: string;
     user: User;
 }
+
+export interface UsernameResponse {
+  username: string;
+  available: string;
+}
+
+export interface TagsResponse {
+  file_id: number;
+  tag: string;
+  filename: string;
+  user_id: number;
+  description: string;
+  filesize: number;
+  mime_type: string;
+  tag_id: number;
+  time_added: string;
+  title: string;
+}
